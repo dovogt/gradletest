@@ -7,7 +7,86 @@
  */
 
 // Apply the java plugin to add support for Java
+
+import org.gradle.plugins.ide.eclipse.model.Library
 apply plugin: 'java'
+apply plugin: 'eclipse'
+
+eclipse {
+	project {
+		//if you don't like the name Gradle has chosen
+		name = 'gradleTest'
+
+		//if you want to specify the Eclipse project's comment
+		comment = 'Base - Trunk'
+
+		//if you want to append a build command with parameters:
+		//buildCommand 'org.eclipse.jdt.core.javabuilder'
+		buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
+
+		//if you want to assign natures in a groovy fashion:
+		natures = ['org.eclipse.buildship.core.gradleprojectnature', 'org.eclipse.jdt.core.javanature']
+
+		linkedResource name: 'properties_zentral', type: '2', locationUri: 'C:/Entwicklung/properties'
+	}
+
+	classpath {
+		downloadSources = true
+	    downloadJavadoc = false
+
+   		//Änderung Ausgabeverzeichnisse
+	    defaultOutputDir = file('classes/main')
+
+	    containers  'org.eclipse.buildship.core.gradleclasspathcontainer', 'org.eclipse.jdt.junit.JUNIT_CONTAINER/4'
+
+	    file {
+			whenMerged {
+				//change DefaultOutputfolder
+			    def src = entries.find { it.path == 'source' }
+                src.output = "classes/main"
+
+               	def testsrc = entries.find { it.path == 'test/java' }
+                testsrc.output = "classes/test"
+
+                def testres = entries.find { it.path == 'test/resources' }
+                testres.output = "classes/test"
+
+				//Delete all lib entries
+               // entries.removeAll { it.kind == 'lib' }
+
+                //Add properties entries
+                entries += new Library(fileReference('properties_zentral'))
+                entries += new Library(fileReference('properties_projekt'))
+    		}
+		}
+    }
+}
+
+
+//Die von gradle vorgegebenen Pfade werden auf die css-Standardpfade umgebogen
+sourceSets {
+    main {
+        java {
+         	srcDirs = ['source']
+        }
+
+        resources {
+        	srcDirs = ['images']
+        }
+
+        output.classesDir = 'classes/main'
+     }
+    test    {
+        java {
+        	srcDirs = ['test/java']
+        }
+        resources {
+            srcDirs = ['test/resources']
+        }
+
+        output.classesDir = 'classes/test'
+    }
+}
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -17,8 +96,9 @@ repositories {
 }
 
 dependencies {
-    // The production code uses Guava
-    compile 'com.google.guava:guava:20.0'
+
+	//Properties hinzufügen
+	runtime  fileTree(dir: "lib/properties")
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
