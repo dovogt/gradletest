@@ -1,6 +1,7 @@
 GRADLE_BUILD_COMMANDS=org.eclipse.jdt.core.javabuilder
 GRADLE_FILTERS=1.0-projectRelativePath-matches-false-false-build,1.0-projectRelativePath-matches-false-false-.gradle
 GRADLE_NATURES=org.eclipse.jdt.core.javanature
+auto.sync=false
 build.commands=org.eclipse.jdt.core.javabuilder
 build.scans.enabled=false
 connection.arguments=
