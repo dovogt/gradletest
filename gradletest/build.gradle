@@ -13,23 +13,22 @@ apply plugin: 'java'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-//Die von gradle vorgegebenen Pfade werden auf die css-Standardpfade umgebogen
-sourceSets {
-	test    {
-		runtimeClasspath += files("lib/properties")
-	}
-}
 
-// In this section you declare where to find the dependencies of your project
 repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
 
 dependencies {
+	// Logging
+	implementation "org.apache.logging.log4j:log4j-api:2.11.0"
+
+	// JDOM
+	implementation "org.jopendocument:jdom:1.1.1"
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
+
+	//Database
+    runtimeOnly "com.microsoft.sqlserver:sqljdbc42:6.0.8112.100"
 }
 
