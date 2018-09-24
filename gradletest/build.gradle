@@ -20,8 +20,7 @@ repositories {
 
 dependencies {
 	//Properties - First Element in Classpath
-	runtimeOnly fileTree(dir: "lib/properties")
-	testRuntimeOnly fileTree(dir: "lib/properties")
+	runtimeOnly files("lib/properties")
 
 	// Logging
 	compile "org.apache.logging.log4j:log4j-core:2.11.0"
